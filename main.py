@@ -180,7 +180,7 @@ model = PetModel("FPN", "resnet34", in_channels=3, out_classes=1)
 
 # Training
 trainer = pl.Trainer(
-    gpus=2,
+    gpus=1,
     max_epochs=5
 )
 trainer.fit(
