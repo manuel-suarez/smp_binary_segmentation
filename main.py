@@ -176,16 +176,17 @@ class PetModel(pl.LightningModule):
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=0.0001)
 
-model = PetModel("FPN", "resnet34", in_channels=3, out_classes=1)
+if __name__ == '__main__':
+    model = PetModel("FPN", "resnet34", in_channels=3, out_classes=1)
 
-# Training
-trainer = pl.Trainer(
-    gpus=1,
-    max_epochs=5
-)
-trainer.fit(
-    model,
-    train_dataloaders=train_dataloader,
-    val_dataloaders=valid_dataloader
-)
+    # Training
+    trainer = pl.Trainer(
+        gpus=1,
+        max_epochs=5
+    )
+    trainer.fit(
+        model,
+        train_dataloaders=train_dataloader,
+        val_dataloaders=valid_dataloader
+    )
 logging.info('Done!')
