@@ -182,7 +182,7 @@ if __name__ == '__main__':
     # Training
     trainer = pl.Trainer(
         gpus=1,
-        max_epochs=5
+        max_epochs=100
     )
     trainer.fit(
         model,
