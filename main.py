@@ -59,7 +59,7 @@ plt.savefig("figure3.png")
 
 # Model definition
 class PetModel(pl.LightningModule):
-    def __int__(self, arch, encoder_name, in_channels, out_classes, **kwargs):
+    def __init__(self, arch, encoder_name, in_channels, out_classes, **kwargs):
         super().__init__()
         self.model = smp.create_model(
             arch, encoder_name=encoder_name, in_channels=in_channels, classes=out_classes, **kwargs
