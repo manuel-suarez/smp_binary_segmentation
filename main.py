@@ -16,7 +16,7 @@ logging.info('Init')
 
 # download data
 root = "."
-#SimpleOxfordPetDataset.download(root)
+SimpleOxfordPetDataset.download(root)
 
 # init train, val, test sets
 train_dataset = SimpleOxfordPetDataset(root, "train")
@@ -189,4 +189,34 @@ if __name__ == '__main__':
         train_dataloaders=train_dataloader,
         val_dataloaders=valid_dataloader
     )
+    # run validation dataset
+    valid_metrics = trainer.validate(model, dataloaders=valid_dataloader, verbose=False)
+    pprint(valid_metrics)
+    # run test dataset
+    test_metrics = trainer.test(model, dataloaders=test_dataloader, verbose=False)
+    pprint(test_metrics)
+    # result visualization
+    batch = next(iter(test_dataloader))
+    with torch.no_grad():
+        model.eval()
+        logits = model(batch["image"])
+    pr_masks = logits.sigmoid()
+
+    for image, gt_mask, pr_mask in zip(batch["image"], batch["mask"], pr_masks):
+        plt.figure(figsize=(10, 5))
+        plt.subplot(1, 3, 1)
+        plt.imshow(image.numpy().transpose(1, 2, 0)) # convert CHW -> HWC
+        plt.title("Image")
+        plt.axis("off")
+
+        plt.subplot(1, 3, 2)
+        plt.imshow(gt_mask.numpy().squeeze()) # just squeeze classes dim, because we have only one class
+        plt.title("Ground truth")
+        plt.axis("off")
+
+        plt.subplot(1, 3, 3)
+        plt.imshow(pr_mask.numpy().squeeze()) # just squeeze classes dim, because we have only one class
+        plt.title("Prediction")
+        plt.axis("off")
+        plt.savefig("figure4.png")
 logging.info('Done!')
